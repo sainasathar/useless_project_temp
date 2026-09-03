@@ -1,1 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHITTYKAKA: MDPI v9.0 (POISSON PRECISION EDITION)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&family=Inter:wght@400;900&display=swap');
 
+        :root {
+            --sky-blue: #0c4a6e;
+            --sky-blue-light: #38bdf8;
+            --storm-blue: #030712;
+            --warning-yellow: #facc15;
+            --emergency-red: #dc2626;
+            --splat-white: #ffffff;
+            --tactical-black: #0f172a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--splat-white);
+            overflow-x: hidden;
+            background-color: var(--sky-blue);
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .font-bungee { font-family: 'Bungee', cursive; }
+        .font-mono { font-family: 'Space Mono', monospace; }
+
+        .hazard-bg {
+            background: repeating-linear-gradient(
+                -45deg,
+                #082f49,
+                #082f49 20px,
+                var(--warning-yellow) 20px,
+                var(--warning-yellow) 40px
+            );
+        }
+
+        .region-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .region-card:hover {
+            transform: scale(1.03) rotate(0.5deg);
+            border-color: var(--sky-blue-light);
+            background-color: rgba(56, 189, 248, 0.15);
+        }
+        .region-card.active {
+            border-color: var(--sky-blue-light);
+            background-color: var(--sky-blue-light);
+            color: black;
+        }
+
+        .location-item {
+            padding: 8px 12px;
+            background: #1e293b;
+            border: 1px solid #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+        .location-item:hover {
+            background: #334155;
+            border-color: var(--sky-blue-light);
+        }
+
+        .scanline {
+            position: absolute;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to bottom, transparent, var(--sky-blue-light), transparent);
+            opacity: 0.3;
+            animation: scanline 4s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(1000%); }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--sky-blue-light); }
+
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        .glitch-text {
+            text-shadow: 2px 0 #38bdf8, -2px 0 #0ea5e9;
+        }
+
+        .danger-pulse {
+            animation: danger-pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes danger-pulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(220, 38, 38, 0.6); }
+            50% { text-shadow: 0 0 30px rgba(220, 38, 38, 0.9); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-6 px-4 relative">
+
+    <!-- DYNAMIC REACTIVE BACKGROUND CANVAS -->
+    <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- TOP ALERT BAR -->
+    <div class="w-full max-w-6xl overflow-hidden hazard-bg h-8 mb-6 border-b-4 border-black shadow-xl flex items-center relative z-10">
+        <div class="whitespace-nowrap animate-[marquee_25s_linear_infinite] flex gap-20 text-black font-bungee text-sm">
+            <span>UNIDENTIFIED FLYING OBJECTS DETECTED OVER KOZHIKODE BEACH</span>
+            <span>THATTUKADA VECTORS COMPROMISED ACROSS MALABAR</span>
+            <span>WET PAINT DETECTED IN KOCHI MARINE DRIVE</span>
+            <span>MAXIMUM ARTILLERY ENGAGED &mdash; SEEK COVER</span>
+            <span>SHINY BIKE ALERT IN THRISSUR ROUND</span>
+        </div>
+    </div>
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+
+    <header class="w-full max-w-5xl mb-8 relative z-10 text-center">
+        <h1 class="font-bungee text-4xl md:text-7xl lg:text-8xl text-sky-300 drop-shadow-[0_5px_0_rgba(0,0,0,1)] glitch-text">
+            SHITTYKAKA
+        </h1>
+        <p class="font-mono text-xs md:text-sm tracking-[0.3em] bg-sky-700 inline-block px-4 py-1 mt-2 font-bold uppercase shadow-lg">
+            Malabaric Dropping Probability Index (MDPI) v9.0 &mdash; Poisson Precision Engine
+        </p>
+    </header>
+
+    <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
+
+        <!-- LEFT COLUMN: SEARCH & HOTSPOTS & INPUTS -->
+        <div class="lg:col-span-8 space-y-8">
+
+            <!-- LOCATION SEARCH & HAZARD LOOKUP -->
+            <section class="bg-slate-900/90 backdrop-blur-md border-4 border-sky-900 p-6 relative overflow-hidden shadow-2xl">
+                <div class="scanline"></div>
+                <h3 class="font-bungee text-lg mb-4 text-sky-300 flex items-center gap-2">
+                    <i data-lucide="search"></i> GPS LOCATION SEARCH & HAZARD LOOKUP
+                </h3>
+                <div class="flex gap-2 mb-2 relative">
+                    <div class="flex-1 relative">
+                        <input type="text" id="location-search-input" placeholder="Search Kerala location (e.g. Lulu Mall Kochi, Kozhikode Beach)..." class="w-full bg-slate-800 border-2 border-slate-700 p-3 text-sm font-mono text-white focus:border-sky-400 outline-none focus:rounded-b-none focus:border-b-0">
+                        <div id="location-dropdown" class="hidden absolute top-full left-0 right-0 bg-slate-800 border-2 border-t-0 border-sky-400 max-h-48 overflow-y-auto custom-scrollbar z-50">
+                        </div>
+                    </div>
+                    <button id="search-location-btn" class="bg-sky-400 hover:bg-sky-300 text-black font-bungee px-6 py-3 text-sm transition-all shrink-0 active:scale-95">
+                        SCAN
+                    </button>
+                </div>
+                <div id="search-report-box" class="hidden bg-slate-950 p-4 border-2 border-sky-400/50 space-y-3 mt-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span id="searched-place-title" class="font-bungee text-sm text-sky-300 block">---</span>
+                            <span id="searched-place-coords" class="font-mono text-[10px] text-slate-400">Lat/Long: ---</span>
+                        </div>
+                        <div class="text-right">
+                            <span id="searched-place-score" class="font-mono text-xs bg-red-600 px-2 py-1 font-bold block mb-1">MDPI: 0%</span>
+                            <span id="searched-threat-level" class="font-mono text-[9px] bg-slate-700 px-2 py-0.5 inline-block">SCANNING...</span>
+                        </div>
+                    </div>
+                    <p id="searched-ai-report" class="font-mono text-xs text-slate-300 italic border-l-2 border-sky-400 pl-2">"AI analysis loading..."</p>
+                </div>
+            </section>
+
+            <!-- REGION HOTSPOT SELECTOR -->
+            <section class="bg-slate-900/90 backdrop-blur-md border-4 border-sky-900 p-6 relative overflow-hidden shadow-2xl">
+                <h3 class="font-bungee text-xl mb-4 text-sky-300 flex items-center gap-2">
+                    <i data-lucide="map"></i> TACTICAL REGION HOTSPOTS
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3" id="region-grid">
+                </div>
+            </section>
+
+            <!-- CORE PARAMETERS -->
+            <section class="bg-slate-900/90 backdrop-blur-md border-4 border-sky-900 p-6 shadow-2xl">
+                <h3 class="font-bungee text-xl mb-6 text-sky-300 flex items-center gap-2">
+                    <i data-lucide="settings-2"></i> FIELD COMBAT PARAMETERS
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="space-y-3">
+                            <label class="block text-xs font-mono font-bold uppercase text-slate-400 tracking-widest">Environment Type</label>
+                            <div class="grid grid-cols-1 gap-2" id="env-selector">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-8">
+                        <div class="space-y-3">
+                            <label class="block text-xs font-mono font-bold uppercase text-slate-400 tracking-widest">Target Reflectivity (Shine %)</label>
+                            <input type="range" id="shine-input" min="0" max="100" value="30" class="w-full h-4 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-400">
+                            <div class="flex justify-between font-mono text-[10px] text-sky-400">
+                                <span>MATTE / DUSTY</span>
+                                <span id="shine-val">30%</span>
+                                <span>SHOWROOM WAXED</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="block text-xs font-mono font-bold uppercase text-slate-400 tracking-widest">Time Intel</label>
+                                <select id="time-select" class="w-full bg-slate-800 border-2 border-slate-700 p-3 text-sm focus:border-sky-400 outline-none font-mono">
+                                    <option value="morning">Morning Rush</option>
+                                    <option value="noon">Siesta Break</option>
+                                    <option value="evening" selected>Roosting Hour</option>
+                                    <option value="night">Night Op</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-3 bg-slate-800 p-3 border-2 border-slate-700 mt-6">
+                                <input type="checkbox" id="shiny-toggle" class="w-6 h-6 accent-sky-400">
+                                <span class="text-[10px] font-mono leading-none">CARRYING FOOD / SHINY OBJECT?</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="block text-xs font-mono font-bold uppercase text-slate-400 tracking-widest">Exposure Duration (Minutes)</label>
+                            <input type="range" id="exposure-input" min="1" max="120" value="30" class="w-full h-4 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-400">
+                            <div class="flex justify-between font-mono text-[10px] text-sky-400">
+                                <span>1 MIN</span>
+                                <span id="exposure-val">30 min</span>
+                                <span>120 MIN</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-xs font-mono font-bold uppercase text-slate-400 tracking-widest">Squad Size (People Present)</label>
+                            <input type="number" id="squad-input" min="1" max="500" value="1" class="w-full bg-slate-800 border-2 border-slate-700 p-3 text-sm focus:border-sky-400 outline-none font-mono">
+                        </div>
+                    </div>
+                </div>
+
+                <button id="compute-btn" class="w-full mt-10 bg-sky-400 hover:bg-sky-300 text-black font-bungee text-3xl py-6 border-b-8 border-sky-700 transition-all active:border-b-0 active:translate-y-2 flex items-center justify-center gap-4 group shadow-xl">
+                    <i data-lucide="crosshair" class="group-hover:animate-spin"></i>
+                    START PROBABILITY SCAN
+                </button>
+            </section>
+        </div>
+
+        <!-- RIGHT COLUMN: RESULTS & COMMUNITY DIRECTORY -->
+        <div class="lg:col-span-4 space-y-8">
+
+            <!-- RESULTS DISPLAY -->
+            <section id="result-container" class="bg-black/90 backdrop-blur-md border-4 border-sky-900 p-6 min-h-[400px] flex flex-col items-center justify-center relative shadow-2xl">
+                <div id="idle-state" class="text-center space-y-4">
+                    <i data-lucide="radar" class="w-16 h-16 text-slate-700 mx-auto animate-pulse"></i>
+                    <p class="font-mono text-slate-500 text-xs uppercase tracking-tighter">System Idle. Waiting for coordinates...</p>
+                </div>
+
+                <div id="loading-state" class="hidden text-center space-y-6">
+                    <div class="w-32 h-32 border-8 border-sky-400/20 border-t-sky-400 rounded-full animate-spin mx-auto"></div>
+                    <p class="font-bungee text-xl text-sky-300 animate-pulse">TRIANGULATING TRAJECTORY...</p>
+                    <div id="loading-logs" class="font-mono text-[9px] text-slate-500 h-10 overflow-hidden text-left bg-slate-900 p-2 border border-slate-800">
+                    </div>
+                </div>
+
+                <div id="result-state" class="hidden w-full space-y-6 text-center animate-[scale-in_0.3s_ease-out]">
+                    <div class="relative inline-block">
+                        <div id="prob-display" class="font-bungee text-7xl md:text-8xl text-red-600 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">0%</div>
+                        <div class="absolute -top-4 -right-4 bg-sky-400 text-black px-2 py-1 font-bungee text-[10px] rotate-12">MDPI SCORE</div>
+                    </div>
+                    <div id="threat-level" class="font-mono text-xs p-3 bg-red-950 border border-red-500 text-red-200">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 font-mono text-[9px] uppercase text-slate-400">
+                        <div class="bg-slate-900 p-2 border border-slate-800">Model: Poisson Process</div>
+                        <div class="bg-slate-900 p-2 border border-slate-800">Payload: White Tactical</div>
+                    </div>
+                    <button id="reset-btn" class="text-xs text-slate-500 hover:text-white underline font-mono">NEW SCAN</button>
+                </div>
+            </section>
+
+            <!-- COMMUNITY DANGER ZONING DIRECTORY -->
+            <section class="bg-slate-900/90 backdrop-blur-md border-4 border-sky-900 flex flex-col h-[500px] shadow-2xl">
+                <div class="p-4 border-b-2 border-sky-900 bg-slate-800 flex justify-between items-center">
+                    <h3 class="font-bungee text-xs text-sky-300 flex items-center gap-2">
+                        <i data-lucide="shield-alert"></i> ZONE RATING DIRECTORY
+                    </h3>
+                    <button id="open-rate-modal" class="text-[9px] bg-sky-400 text-black px-2.5 py-1 font-bold rounded uppercase">RATE A ZONE</button>
+                </div>
+
+                <div id="directory-list" class="flex-grow overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- RATE ZONE MODAL -->
+    <div id="rate-modal" class="fixed inset-0 z-[100] bg-black/90 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-slate-900 border-4 border-sky-400 w-full max-w-md p-6 relative shadow-2xl">
+            <button id="close-modal" class="absolute top-2 right-2 text-slate-500 hover:text-white">
+                <i data-lucide="x"></i>
+            </button>
+            <h2 class="font-bungee text-2xl text-sky-300 mb-6 uppercase italic">Stamp Zone Status</h2>
+            <form id="zone-form" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1">Location / Junction Name</label>
+                    <input type="text" id="zone-name" placeholder="e.g. MG Road, Ernakulam" class="w-full bg-slate-800 border-2 border-slate-700 p-3 text-sm focus:border-sky-400 outline-none font-mono" required>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1">Designate Danger Level</label>
+                    <select id="zone-status-select" class="w-full bg-slate-800 border-2 border-slate-700 p-3 text-sm focus:border-sky-400 outline-none font-mono">
+                        <option value="safe">🟢 Sanctuary (Safe Zone)</option>
+                        <option value="moderate">🟡 Caution (Neutral/Moderate)</option>
+                        <option value="danger">🔴 Danger Zone (Heavy Artillery)</option>
+                        <option value="critical">💀 Death Zone (Absolute Annihilation)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1">Trauma / Incident Log</label>
+                    <textarea id="zone-comment" rows="3" placeholder="Sustained dual direct hits while sipping tea..." class="w-full bg-slate-800 border-2 border-slate-700 p-3 text-sm focus:border-sky-400 outline-none font-mono" required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-sky-400 hover:bg-sky-300 text-black font-bungee py-4 mt-4 text-base">SUBMIT STAMP</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="mt-12 text-center max-w-4xl opacity-50 relative z-10 mb-10">
+        <p class="font-mono text-[9px] uppercase tracking-tighter leading-relaxed">
+            &copy; 2026 KERALA AVIAN DEFENSE & BALLISTICS UNIT. ALL RIGHTS RESERVED.
+            NO CROWS WERE HARMED DURING THE CODING OF THIS INDEX.
+            YOUR WHITE SHIRT IS NOT OUR RESPONSIBILITY.
+        </p>
+    </footer>
+
+    <script>
+        // ============================================================================
+        // SHITTYKAKA — ELITE TACTICAL DEFENSE SYSTEM v9.0 - POISSON PRECISION ENGINE
+        // ============================================================================
+
+        // --- COMPREHENSIVE KERALA LOCATION DATABASE ---
+        const KERALA_LOCATIONS = [
+            { name: 'Lulu Mall Kochi', coords: { lat: 9.9457, lon: 76.3693 }, baseThreat: 45, desc: 'High-rise shopping complex' },
+            { name: 'Marine Drive Kochi', coords: { lat: 9.9610, lon: 76.3555 }, baseThreat: 62, desc: 'Scenic waterfront boulevard' },
+            { name: 'Fort Kochi Beach', coords: { lat: 9.9657, lon: 76.2492 }, baseThreat: 55, desc: 'Historic coastal zone' },
+            { name: 'Kaloor Stadium', coords: { lat: 9.9493, lon: 76.3368 }, baseThreat: 78, desc: 'Athletic gathering point' },
+            { name: 'Cochin Shipyard', coords: { lat: 9.9781, lon: 76.3298 }, baseThreat: 38, desc: 'Industrial perimeter' },
+            { name: 'Princess Street Kochi', coords: { lat: 9.9639, lon: 76.2583 }, baseThreat: 52, desc: 'Commercial district' },
+            { name: 'Kozhikode Beach', coords: { lat: 11.8679, lon: 75.3572 }, baseThreat: 85, desc: 'Prime aerial hunting ground' },
+            { name: 'Mananchira Square', coords: { lat: 11.8693, lon: 75.3619 }, baseThreat: 72, desc: 'Central plaza with crowds' },
+            { name: 'SM Street Market', coords: { lat: 11.8700, lon: 75.3592 }, baseThreat: 68, desc: 'Dense pedestrian area' },
+            { name: 'Sarovaram Park', coords: { lat: 11.8829, lon: 75.3476 }, baseThreat: 35, desc: 'Green sanctuary' },
+            { name: 'Kappad Beach', coords: { lat: 11.8457, lon: 75.3629 }, baseThreat: 81, desc: 'Secondary coastal hazard' },
+            { name: 'Pattom Junction TVM', coords: { lat: 8.5241, lon: 76.9366 }, baseThreat: 74, desc: 'Major traffic intersection' },
+            { name: 'Secretariat TVM', coords: { lat: 8.5282, lon: 76.9254 }, baseThreat: 58, desc: 'Government headquarters' },
+            { name: 'Kovalam Lighthouse', coords: { lat: 8.3947, lon: 76.9724 }, baseThreat: 52, desc: 'Coastal landmark' },
+            { name: 'Varkala Cliff Edge', coords: { lat: 8.7384, lon: 76.7309 }, baseThreat: 48, desc: 'Scenic cliff with wind shear' },
+            { name: 'Trivandrum Central Station', coords: { lat: 8.4915, lon: 76.9396 }, baseThreat: 64, desc: 'Transport hub' },
+            { name: 'Thrissur Round', coords: { lat: 10.5269, lon: 76.2144 }, baseThreat: 76, desc: 'Iconic central roundabout' },
+            { name: 'Vadakkunnathan Temple', coords: { lat: 10.5210, lon: 76.2127 }, baseThreat: 41, desc: 'Sacred temple complex' },
+            { name: 'Shakthan Thampuran Palace', coords: { lat: 10.5190, lon: 76.2105 }, baseThreat: 42, desc: 'Historical palace' },
+            { name: 'Cheruthuruthy', coords: { lat: 10.6182, lon: 76.2571 }, baseThreat: 29, desc: 'Arts & cultural hub' },
+            { name: 'Kodungallur', coords: { lat: 10.2234, lon: 76.1966 }, baseThreat: 51, desc: 'Ancient port town' },
+            { name: 'Nilambur Teak Museum', coords: { lat: 11.3076, lon: 75.9573 }, baseThreat: 44, desc: 'Heritage site' },
+            { name: 'Kottakkal Ayurveda Hub', coords: { lat: 11.5049, lon: 75.8812 }, baseThreat: 39, desc: 'Medical facility' },
+            { name: 'Malappuram Town Center', coords: { lat: 11.7257, lon: 76.0673 }, baseThreat: 63, desc: 'Urban shopping area' },
+            { name: 'Wayanad Wildlife Sanctuary', coords: { lat: 11.6062, lon: 75.9833 }, baseThreat: 22, desc: 'Forested nature reserve' },
+            { name: 'Sentinel Rock Wayanad', coords: { lat: 11.5857, lon: 75.8190 }, baseThreat: 18, desc: 'Trekking destination' },
+            { name: 'Kasaragod Town', coords: { lat: 12.4945, lon: 75.1421 }, baseThreat: 57, desc: 'Northern district hub' },
+            { name: 'Bekal Fort', coords: { lat: 12.0119, lon: 75.1289 }, baseThreat: 31, desc: 'Coastal fort landmark' },
+            { name: 'Sabarimala Temple', coords: { lat: 9.4412, lon: 76.7427 }, baseThreat: 28, desc: 'Sacred pilgrimage site' },
+            { name: 'Pathanamthitta Town', coords: { lat: 9.2820, lon: 76.7795 }, baseThreat: 46, desc: 'District center' },
+            { name: 'Alappuzha Beach', coords: { lat: 9.4867, lon: 76.3256 }, baseThreat: 59, desc: 'Backwater beach zone' },
+            { name: 'Kumarakom Backwaters', coords: { lat: 9.6025, lon: 76.4069 }, baseThreat: 35, desc: 'Tourist backwater hub' },
+            { name: 'Munnar Hills', coords: { lat: 10.5900, lon: 77.0514 }, baseThreat: 15, desc: 'High elevation safety' },
+            { name: 'Thekkady Wildlife', coords: { lat: 9.8234, lon: 77.2156 }, baseThreat: 19, desc: 'Nature reserve' },
+            { name: 'Kochi Airport', coords: { lat: 10.1524, lon: 76.4187 }, baseThreat: 33, desc: 'Aviation facility' },
+            { name: 'Technopark TVM', coords: { lat: 8.5450, lon: 76.9270 }, baseThreat: 40, desc: 'IT corporate campus' },
+        ];
+
+        // --- CONFIG DATA ---
+        // rho (birds per 2500 sqm tactical grid cell) and a local density multiplier per environment
+        const REGIONS = [
+            { id: 'kozhikode', name: 'Kozhikode Beach', rho: 160, desc: 'Aerodynamic Splatter' },
+            { id: 'kochi', name: 'Marine Drive', rho: 130, desc: 'High Density' },
+            { id: 'trivandrum', name: 'Secretariat', rho: 90, desc: 'Bureaucratic Crows' },
+            { id: 'thrissur', name: 'The Round', rho: 140, desc: 'Central Aggression' },
+            { id: 'wayanad', name: 'Canopy Zone', rho: 30, desc: 'Stealth Bombing' }
+        ];
+
+        // C_cover (overhead structure factor) per the Crow Dropping Risk Formula
+        const ENVS = [
+            { id: 'thattukada', name: 'Open Thattukada', cover: 1.00, densityMult: 1.35 },
+            { id: 'wires', name: 'Power Line Grid', cover: 2.50, densityMult: 1.00 },
+            { id: 'tree', name: 'Jackfruit/Mango Tree Canopy', cover: 4.50, densityMult: 1.15 },
+            { id: 'vehicle', name: 'Open Sky Near Vehicle', cover: 1.00, densityMult: 1.00 },
+            { id: 'assembly', name: 'School Ground / Open Sky', cover: 1.00, densityMult: 0.90 },
+            { id: 'indoor', name: 'Indoors / Concrete Roof', cover: 0.05, densityMult: 0.40 }
+        ];
+
+        let communityZones = [
+            { name: "Pattom Junction, TVM", status: "danger", comment: "Overhead power lines heavily armed. Watch your mirrors.", votes: 34, timestamp: new Date(Date.now() - 86400000) },
+            { name: "Kaloor Stadium, Kochi", status: "critical", comment: "Direct hit on white linen shirt within 10 seconds. Elite squadron.", votes: 52, timestamp: new Date(Date.now() - 172800000) },
+            { name: "Mananchira Square, Kozhikode", status: "danger", comment: "Elite squadron operational here at dusk. High precision targeting.", votes: 41, timestamp: new Date(Date.now() - 259200000) },
+            { name: "Lulu Mall Parking, Edappally", status: "safe", comment: "Underground sanctuary! Zero aerial threats detected.", votes: 89, timestamp: new Date(Date.now() - 345600000) },
+            { name: "Varkala Cliff Edge", status: "moderate", comment: "Breezy winds scatter payloads sideways unpredictably.", votes: 19, timestamp: new Date(Date.now() - 432000000) },
+            { name: "Kozhikode Beach Promenade", status: "critical", comment: "Coordinated flock attacks observed. Extreme danger zone.", votes: 127, timestamp: new Date(Date.now() - 518400000) },
+            { name: "Fort Kochi Streets", status: "moderate", comment: "Tourist areas have mixed threat levels. Evening worse than morning.", votes: 43, timestamp: new Date(Date.now() - 604800000) }
+        ];
+
+        // --- AUDIO ENGINE ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function synthSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            if (type === 'caw') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.3);
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            } else if (type === 'splat') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+            } else if (type === 'drumroll') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(80, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            }
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        // --- REACTIVE BACKGROUND CANVAS ENGINE ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let currentBackgroundState = 'safe';
+        let clouds = Array.from({ length: 10 }, () => ({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * (window.innerHeight * 0.5),
+            speed: 0.15 + Math.random() * 0.35,
+            scale: 0.7 + Math.random() * 1.5
+        }));
+
+        let stormClouds = Array.from({ length: 6 }, () => ({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * (window.innerHeight * 0.35),
+            speed: 0.3 + Math.random() * 0.4,
+            scale: 1.2 + Math.random() * 1.6
+        }));
+
+        let feathers = Array.from({ length: 20 }, () => ({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            vy: 0.4 + Math.random() * 0.8,
+            vx: (Math.random() - 0.5) * 0.6,
+            rot: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 2.5
+        }));
+
+        let crows = Array.from({ length: 18 }, () => ({
+            x: window.innerWidth + Math.random() * 1200,
+            y: 30 + Math.random() * (window.innerHeight * 0.7),
+            speed: 3.2 + Math.random() * 3.2,
+            size: 1.1 + Math.random() * 0.9,
+            wingPhase: Math.random() * Math.PI * 2,
+            hasDropped: false,
+            flightPattern: Math.random()
+        }));
+
+        let drops = [];
+        let gridPulse = 0;
+
+        function triggerDangerBackground() {
+            currentBackgroundState = 'danger';
+            crows.forEach(c => {
+                c.x = window.innerWidth + Math.random() * 1000;
+                c.y = 20 + Math.random() * (window.innerHeight * 0.8);
+                c.hasDropped = false;
+            });
+        }
+
+        function triggerSafeBackground() {
+            currentBackgroundState = 'safe';
+            drops = [];
+        }
+
+        function drawCloud(x, y, scale, alpha) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.beginPath();
+            ctx.arc(0, 0, 30, Math.PI * 0.5, Math.PI * 1.5);
+            ctx.arc(25, -25, 35, Math.PI * 1, Math.PI * 1.85);
+            ctx.arc(60, -15, 25, Math.PI * 1.2, Math.PI * 2.2);
+            ctx.arc(75, 10, 20, Math.PI * 0, Math.PI * 1);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawCrow(c) {
+            ctx.save();
+            ctx.translate(c.x, c.y);
+            ctx.scale(-c.size, c.size);
+
+            c.wingPhase += 0.16;
+            let wingOffset = Math.sin(c.wingPhase) * 17;
+
+            ctx.shadowColor = 'rgba(224, 242, 254, 0.55)';
+            ctx.shadowBlur = 6;
+
+            ctx.fillStyle = '#0b1120';
+            ctx.strokeStyle = '#e0f2fe';
+            ctx.lineWidth = 1.2;
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-14, -18 + wingOffset);
+            ctx.lineTo(10, -6);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 16, 8, -0.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(14, -4, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#0b1120';
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = '#facc15';
+            ctx.fillRect(18, -6, 6, 3);
+
+            ctx.restore();
+        }
+
+        function drawTacticalGrid() {
+            gridPulse = (gridPulse + 0.02) % (Math.PI * 2);
+
+            ctx.strokeStyle = `rgba(125, 211, 252, ${0.06 + Math.sin(gridPulse) * 0.03})`;
+            ctx.lineWidth = 1;
+
+            const gridSize = 60;
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            if (Math.random() < 0.02) {
+                const tx = Math.random() * canvas.width;
+                const ty = Math.random() * (canvas.height * 0.7);
+                ctx.strokeStyle = 'rgba(220, 38, 38, 0.18)';
+                ctx.lineWidth = 1;
+                for (let r = 20; r <= 50; r += 15) {
+                    ctx.beginPath();
+                    ctx.arc(tx, ty, r, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function animateBackground() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (currentBackgroundState === 'safe') {
+                let grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                grad.addColorStop(0, '#1d4ed8');
+                grad.addColorStop(0.45, '#38bdf8');
+                grad.addColorStop(0.8, '#7dd3fc');
+                grad.addColorStop(1, '#bae6fd');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                clouds.forEach(cl => {
+                    cl.x += cl.speed;
+                    if (cl.x > canvas.width + 150) cl.x = -150;
+                    drawCloud(cl.x, cl.y, cl.scale, 0.85);
+                });
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                feathers.forEach(f => {
+                    f.y += f.vy;
+                    f.x += f.vx + Math.sin(f.y * 0.01) * 0.5;
+                    f.rot += f.vRot;
+                    if (f.y > canvas.height + 20) {
+                        f.y = -20;
+                        f.x = Math.random() * canvas.width;
+                    }
+                    ctx.save();
+                    ctx.translate(f.x, f.y);
+                    ctx.rotate((f.rot * Math.PI) / 180);
+                    ctx.fillRect(-2, -5, 4, 10);
+                    ctx.restore();
+                });
+
+            } else {
+                let grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                grad.addColorStop(0, '#020617');
+                grad.addColorStop(0.35, '#0c1a3d');
+                grad.addColorStop(0.7, '#0b2447');
+                grad.addColorStop(1, '#020617');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                stormClouds.forEach(cl => {
+                    cl.x -= cl.speed;
+                    if (cl.x < -200) cl.x = canvas.width + 200;
+                    drawCloud(cl.x, cl.y, cl.scale, 0.18);
+                });
+
+                drawTacticalGrid();
+
+                crows.forEach(c => {
+                    c.x -= c.speed;
+                    c.y += Math.sin(c.x * 0.01 + c.flightPattern) * 0.8;
+
+                    if (c.x < -100) {
+                        c.x = canvas.width + Math.random() * 1000;
+                        c.y = 30 + Math.random() * (canvas.height * 0.6);
+                        c.hasDropped = false;
+                    }
+
+                    if (!c.hasDropped && c.x < canvas.width * 0.75 && Math.random() < 0.04) {
+                        c.hasDropped = true;
+                        for (let i = 0; i < 3 + Math.random() * 2; i++) {
+                            drops.push({
+                                x: c.x + (Math.random() - 0.5) * 20,
+                                y: c.y + 12,
+                                vy: 5 + Math.random() * 5,
+                                vx: (Math.random() - 0.5) * 2,
+                                size: 6 + Math.random() * 14,
+                                opacity: 1,
+                                rotation: Math.random() * Math.PI * 2
+                            });
+                        }
+                    }
+
+                    drawCrow(c);
+                });
+
+                drops.forEach(d => {
+                    d.y += d.vy;
+                    d.vx *= 0.99;
+                    d.x += d.vx;
+                    d.rotation += 0.08;
+                    d.opacity -= 0.004;
+
+                    ctx.save();
+                    ctx.globalAlpha = Math.max(d.opacity, 0);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.translate(d.x, d.y);
+                    ctx.rotate(d.rotation);
+
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, d.size * 0.6, d.size * 0.4, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.ellipse(d.size * 0.3, -d.size * 0.2, d.size * 0.3, d.size * 0.2, 0.3, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.restore();
+                });
+                drops = drops.filter(d => d.opacity > 0 && d.y < canvas.height);
+            }
+
+            requestAnimationFrame(animateBackground);
+        }
+        requestAnimationFrame(animateBackground);
+
+        // --- UI STATE & INITIALIZATION ---
+        let selectedRegion = 'kozhikode';
+        let selectedEnv = 'thattukada';
+        let searchedLocation = null;
+
+        function initUI() {
+            const regionGrid = document.getElementById('region-grid');
+            regionGrid.innerHTML = '';
+            REGIONS.forEach(r => {
+                const div = document.createElement('div');
+                div.className = `region-card p-3 bg-slate-800 text-center ${r.id === selectedRegion ? 'active' : ''}`;
+                div.innerHTML = `
+                    <div class="font-bungee text-[10px]">${r.name}</div>
+                    <div class="font-mono text-[8px] opacity-70 uppercase">${r.desc}</div>
+                `;
+                div.onclick = () => {
+                    selectedRegion = r.id;
+                    document.querySelectorAll('.region-card').forEach(c => c.classList.remove('active'));
+                    div.classList.add('active');
+                    synthSound('drumroll');
+                };
+                regionGrid.appendChild(div);
+            });
+
+            const envSelector = document.getElementById('env-selector');
+            envSelector.innerHTML = '';
+            ENVS.forEach(e => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `w-full text-left p-3 text-xs font-bold font-mono border-2 border-slate-700 transition-all ${e.id === selectedEnv ? 'bg-sky-400 text-black' : 'bg-slate-800 text-white'}`;
+                btn.innerHTML = `<span class="opacity-50 mr-2">>>></span> ${e.name.toUpperCase()}`;
+                btn.onclick = () => {
+                    selectedEnv = e.id;
+                    document.querySelectorAll('#env-selector button').forEach(b => {
+                        b.className = b.className.replace('bg-sky-400 text-black', 'bg-slate-800 text-white');
+                    });
+                    btn.className = btn.className.replace('bg-slate-800 text-white', 'bg-sky-400 text-black');
+                    synthSound('drumroll');
+                };
+                envSelector.appendChild(btn);
+            });
+
+            renderDirectory();
+            setupLocationSearch();
+            lucide.createIcons();
+        }
+
+        function setupLocationSearch() {
+            const searchInput = document.getElementById('location-search-input');
+            const dropdown = document.getElementById('location-dropdown');
+            const searchBtn = document.getElementById('search-location-btn');
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                if (query.length < 1) {
+                    dropdown.classList.add('hidden');
+                    return;
+                }
+
+                const matches = KERALA_LOCATIONS.filter(loc =>
+                    loc.name.toLowerCase().includes(query)
+                ).slice(0, 8);
+
+                if (matches.length === 0) {
+                    dropdown.classList.add('hidden');
+                    return;
+                }
+
+                dropdown.innerHTML = matches.map(loc => `
+                    <div class="location-item" data-name="${loc.name}" data-lat="${loc.coords.lat}" data-lon="${loc.coords.lon}" data-threat="${loc.baseThreat}" data-desc="${loc.desc}">
+                        <div class="font-bungee text-[11px] text-sky-300">${loc.name}</div>
+                        <div class="font-mono text-[9px] text-slate-400">${loc.desc}</div>
+                    </div>
+                `).join('');
+                dropdown.classList.remove('hidden');
+
+                document.querySelectorAll('.location-item').forEach(item => {
+                    item.addEventListener('click', () => selectLocation(item));
+                });
+            });
+
+            searchBtn.addEventListener('click', () => handleLocationSearch());
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleLocationSearch();
+            });
+        }
+
+        function selectLocation(item) {
+            const name = item.getAttribute('data-name');
+            const lat = item.getAttribute('data-lat');
+            const lon = item.getAttribute('data-lon');
+            const baseThreat = parseInt(item.getAttribute('data-threat'));
+
+            searchedLocation = { name, lat, lon, baseThreat };
+            document.getElementById('location-search-input').value = name;
+            document.getElementById('location-dropdown').classList.add('hidden');
+
+            handleLocationSearch();
+        }
+
+        function handleLocationSearch() {
+            if (!searchedLocation) return;
+
+            synthSound('caw');
+            const searchReportBox = document.getElementById('search-report-box');
+            const searchedPlaceTitle = document.getElementById('searched-place-title');
+            const searchedPlaceCoords = document.getElementById('searched-place-coords');
+            const searchedPlaceScore = document.getElementById('searched-place-score');
+            const searchedThreatLevel = document.getElementById('searched-threat-level');
+            const searchedAiReport = document.getElementById('searched-ai-report');
+
+            searchReportBox.classList.remove('hidden');
+            searchedPlaceTitle.innerText = searchedLocation.name.toUpperCase();
+            searchedPlaceCoords.innerText = `Lat: ${searchedLocation.lat.toFixed(4)}, Lon: ${searchedLocation.lon.toFixed(4)}`;
+
+            const hour = new Date().getHours();
+            let timeFactor = 1;
+            if (hour >= 6 && hour < 9) timeFactor = 1.4;
+            else if (hour >= 12 && hour < 14) timeFactor = 0.7;
+            else if (hour >= 16 && hour < 20) timeFactor = 2.1;
+            else if (hour >= 20 || hour < 6) timeFactor = 0.4;
+
+            let prob = searchedLocation.baseThreat * timeFactor;
+            prob = Math.min(Math.max(prob, 10), 99);
+            prob = parseFloat(prob.toFixed(1));
+
+            searchedPlaceScore.innerText = `MDPI: ${prob}%`;
+
+            if (prob >= 70) {
+                searchedPlaceScore.className = "font-mono text-xs bg-red-600 px-2 py-1 font-bold text-white";
+                searchedThreatLevel.className = "font-mono text-[9px] bg-red-700 px-2 py-0.5 inline-block text-red-200";
+                searchedThreatLevel.innerText = "CRITICAL";
+                triggerDangerBackground();
+            } else if (prob >= 40) {
+                searchedPlaceScore.className = "font-mono text-xs bg-amber-600 px-2 py-1 font-bold text-white";
+                searchedThreatLevel.className = "font-mono text-[9px] bg-amber-700 px-2 py-0.5 inline-block text-amber-200";
+                searchedThreatLevel.innerText = "MODERATE";
+                triggerSafeBackground();
+            } else {
+                searchedPlaceScore.className = "font-mono text-xs bg-emerald-700 px-2 py-1 font-bold text-white";
+                searchedThreatLevel.className = "font-mono text-[9px] bg-emerald-800 px-2 py-0.5 inline-block text-emerald-200";
+                searchedThreatLevel.innerText = "SAFE";
+                triggerSafeBackground();
+            }
+
+            const aiSnippets = [
+                "High concentration of seasoned Balikakkas detected. Air density and wind shear favor precision targeting.",
+                "Area frequented by open-air food vendors. Crows have established dedicated aerial patrol routes.",
+                "Power grid infrastructure provides optimal perching. Dive-bombing maneuvers highly probable.",
+                "Quiet commercial zone attracts reconnaissance operations. Constant surveillance detected.",
+                "Maximum hazard zone! Tactical coordination observed. Elite squadron activity reported.",
+                "Proximity to water bodies enhances hydration & refueling operations. Extended attack capability.",
+                "Urban density provides concealment corridors. High probability of ambush scenarios.",
+                "Recent infrastructure changes suggest new targeting patterns. Elevated threat status warranted."
+            ];
+
+            let randomSnippet = aiSnippets[Math.floor(Math.random() * aiSnippets.length)];
+            searchedAiReport.innerText = `"${randomSnippet}"`;
+        }
+
+        // --- CORE CALCULATOR LOGIC ---
+        const computeBtn = document.getElementById('compute-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const idleState = document.getElementById('idle-state');
+        const loadingState = document.getElementById('loading-state');
+        const resultState = document.getElementById('result-state');
+        const loadingLogs = document.getElementById('loading-logs');
+
+        const logMessages = [
+            "Initializing Inhomogeneous Poisson Point Process...",
+            "Accessing local avian density (\u03C1) database...",
+            "Calculating overhead cover factor (C_cover)...",
+            "Detecting reflectivity & attractant load (C_attract)...",
+            "Applying diurnal activity rhythm (C_time)...",
+            "Integrating exposure time across tactical grid cell...",
+            "Solving \u03BB (expected strikes) and P(Strike) = 1 - e^(-\u03BB)...",
+            "Finalizing tactical payload distribution matrix..."
+        ];
+
+        computeBtn.onclick = async () => {
+            synthSound('caw');
+            idleState.classList.add('hidden');
+            resultState.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+
+            loadingLogs.innerHTML = '';
+            for (let msg of logMessages) {
+                const p = document.createElement('p');
+                p.innerText = `> ${msg}`;
+                loadingLogs.appendChild(p);
+                loadingLogs.scrollTop = loadingLogs.scrollHeight;
+                await new Promise(r => setTimeout(r, 280));
+            }
+
+            const result = calculateMDPI();
+            displayResult(result);
+        };
+
+        resetBtn.onclick = () => {
+            resultState.classList.add('hidden');
+            idleState.classList.remove('hidden');
+            triggerSafeBackground();
+            synthSound('drumroll');
+        };
+
+        // --- THE CROW DROPPING RISK FORMULA ---
+        // Inhomogeneous Poisson Point Process: P(Strike) = 1 - e^(-lambda)
+        // lambda = rho * f * (A_target / A_zone) * C_cover * C_attract * C_time * t
+        function calculateMDPI() {
+            const region = REGIONS.find(r => r.id === selectedRegion);
+            const env = ENVS.find(e => e.id === selectedEnv);
+            const shine = parseInt(document.getElementById('shine-input').value);
+            const shinyObj = document.getElementById('shiny-toggle').checked;
+            const time = document.getElementById('time-select').value;
+            const exposureMinutes = parseInt(document.getElementById('exposure-input').value);
+            const squadSize = Math.max(1, parseInt(document.getElementById('squad-input').value) || 1);
+
+            // Exposure time in hours
+            const t = exposureMinutes / 60;
+
+            // rho: local avian density in the 50m x 50m (2500 sqm) tactical grid cell
+            const rho = region.rho * env.densityMult;
+
+            // f: defecation frequency rate (events per bird per hour)
+            const f = 1.6;
+
+            // A_target: exposed surface area of a person (head & shoulders), A_zone: grid cell area
+            const A_target = 0.10;
+            const A_zone = 2500;
+
+            // C_cover: overhead structure factor for the selected environment
+            const C_cover = env.cover;
+
+            // C_attract: attractants & reflectivity (matte 1.0 -> shiny vehicle 1.8 -> food 2.1)
+            let C_attract = 1.0 + (shine / 100) * 0.8;
+            if (shinyObj) C_attract = Math.max(C_attract, 2.1);
+
+            // C_time: diurnal activity rhythm
+            const timeFactors = { morning: 1.45, noon: 0.60, evening: 1.85, night: 0.10 };
+            const C_time = timeFactors[time];
+
+            // lambda: expected number of strikes in exposure time t
+            const lambda = rho * f * (A_target / A_zone) * C_cover * C_attract * C_time * t;
+
+            // Individual strike probability
+            const pSingle = 1 - Math.exp(-lambda);
+
+            // Probability at least one person in the squad gets hit
+            const pGroup = 1 - Math.pow(1 - pSingle, squadSize);
+
+            return {
+                single: Math.min(Math.round(pSingle * 1000) / 10, 99.9),
+                group: Math.min(Math.round(pGroup * 1000) / 10, 99.9),
+                lambda: Math.round(lambda * 1000) / 1000,
+                squadSize
+            };
+        }
+
+        function displayResult(result) {
+            synthSound('splat');
+            loadingState.classList.add('hidden');
+            resultState.classList.remove('hidden');
+
+            const probDisplay = document.getElementById('prob-display');
+            const threatLevel = document.getElementById('threat-level');
+            const prob = result.single;
+
+            probDisplay.innerText = `${prob}%`;
+
+            const squadNote = result.squadSize > 1
+                ? ` SQUAD RISK (${result.squadSize} PEOPLE, AT LEAST ONE HIT): ${result.group}%. λ = ${result.lambda}.`
+                : ` λ (expected strikes) = ${result.lambda}.`;
+
+            if (prob > 30) {
+                threatLevel.innerText = `🔴 CRITICAL: ELITE SQUADRON ACTIVE. CROWS HAVE ACHIEVED AIR SUPERIORITY. FIND SHELTER IMMEDIATELY.${squadNote}`;
+                probDisplay.className = 'font-bungee text-7xl md:text-8xl text-red-600 drop-shadow-[0_0_15px_rgba(220,38,38,0.5)] danger-pulse';
+                document.body.classList.add('shake');
+                setTimeout(() => document.body.classList.remove('shake'), 500);
+                triggerDangerBackground();
+            } else if (prob > 12) {
+                threatLevel.innerText = `🟠 DANGER: HIGH PROBABILITY OF TACTICAL STRIKE. AVOID POWER LINES & OPEN SPACES. EXERCISE CAUTION.${squadNote}`;
+                probDisplay.className = 'font-bungee text-7xl md:text-8xl text-orange-500 drop-shadow-[0_0_15px_rgba(234,88,12,0.5)]';
+                triggerDangerBackground();
+            } else {
+                threatLevel.innerText = `🟡 CAUTION: MODERATE THREAT LEVEL. RECONNAISSANCE CROWS ALWAYS WATCHING. STAY ALERT.${squadNote}`;
+                probDisplay.className = 'font-bungee text-7xl md:text-8xl text-sky-300 drop-shadow-[0_0_15px_rgba(56,189,248,0.5)]';
+                triggerSafeBackground();
+            }
+        }
+
+        // --- SHINE RANGE SLIDER ---
+        document.getElementById('shine-input').oninput = (e) => {
+            document.getElementById('shine-val').innerText = `${e.target.value}%`;
+        };
+
+        document.getElementById('exposure-input').oninput = (e) => {
+            document.getElementById('exposure-val').innerText = `${e.target.value} min`;
+        };
+
+        function renderDirectory() {
+            const list = document.getElementById('directory-list');
+            list.innerHTML = '';
+
+            const sorted = [...communityZones].sort((a, b) => (b.votes - a.votes) || (b.timestamp - a.timestamp));
+
+            sorted.forEach((zone, idx) => {
+                const badgeColor =
+                    zone.status === 'safe' ? 'bg-emerald-950 border-emerald-500 text-emerald-300' :
+                    zone.status === 'moderate' ? 'bg-amber-950 border-amber-500 text-amber-300' :
+                    zone.status === 'danger' ? 'bg-orange-950 border-orange-500 text-orange-300' :
+                    'bg-red-950 border-red-500 text-red-300';
+
+                const statusEmoji =
+                    zone.status === 'safe' ? '🟢' :
+                    zone.status === 'moderate' ? '🟡' :
+                    zone.status === 'danger' ? '🔴' : '💀';
+
+                const timeAgo = getTimeAgo(zone.timestamp);
+
+                const div = document.createElement('div');
+                div.className = "bg-slate-950 p-3 border-l-4 border-sky-400 space-y-2 hover:bg-slate-900 transition-all";
+                div.innerHTML = `
+                    <div class="flex justify-between items-start gap-2">
+                        <div class="flex-1">
+                            <span class="font-bungee text-xs text-sky-300 block">${zone.name}</span>
+                            <span class="font-mono text-[8px] text-slate-500">${timeAgo}</span>
+                        </div>
+                        <span class="font-mono text-[9px] px-2 py-0.5 border ${badgeColor} font-bold whitespace-nowrap">${statusEmoji} ${zone.status.toUpperCase()}</span>
+                    </div>
+                    <p class="font-mono text-[10px] italic text-slate-300">"${zone.comment}"</p>
+                    <div class="flex justify-between items-center text-[9px] font-mono text-slate-500 pt-1 border-t border-slate-900">
+                        <span>Votes: <strong class="text-sky-300">${zone.votes}</strong></span>
+                        <button onclick="upvoteZone('${zone.name}')" class="text-sky-300 hover:underline uppercase hover:text-sky-200">👍 Confirm</button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'just now';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes}m ago`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours}h ago`;
+            const days = Math.floor(hours / 24);
+            return `${days}d ago`;
+        }
+
+        window.upvoteZone = (name) => {
+            const zone = communityZones.find(z => z.name === name);
+            if (zone) {
+                zone.votes += 1;
+                zone.timestamp = new Date();
+                renderDirectory();
+                synthSound('caw');
+            }
+        };
+
+        // --- COMMUNITY ZONE MODAL LOGIC ---
+        const openRateModalBtn = document.getElementById('open-rate-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const rateModal = document.getElementById('rate-modal');
+        const zoneForm = document.getElementById('zone-form');
+
+        openRateModalBtn.onclick = () => rateModal.classList.remove('hidden');
+        closeModalBtn.onclick = () => rateModal.classList.add('hidden');
+
+        rateModal.addEventListener('click', (e) => {
+            if (e.target === rateModal) rateModal.classList.add('hidden');
+        });
+
+        zoneForm.onsubmit = (e) => {
+            e.preventDefault();
+            const newZone = {
+                name: document.getElementById('zone-name').value,
+                status: document.getElementById('zone-status-select').value,
+                comment: document.getElementById('zone-comment').value,
+                votes: 1,
+                timestamp: new Date()
+            };
+            communityZones.push(newZone);
+            renderDirectory();
+            rateModal.classList.add('hidden');
+            zoneForm.reset();
+            synthSound('caw');
+            alert("🎯 ZONE STAMP LOGGED SUCCESSFULLY. COMMUNITY THREAT DATABASE UPDATED. STAY VIGILANT.");
+        };
+
+        // --- FINAL INITIALIZATION ---
+        initUI();
+    </script>
+</body>
+</html>
