@@ -1,51 +1,70 @@
 <img width="1280" height="640" alt="KERALA KAKKA CALCULATOR" src="https://github.com/user-attachments/assets/8920b256-2ba8-4988-b824-5351134eb4bd" />
 
-# THE KERALA KAKKA CALCULATOR 🎯
-### Malabaric Dropping Probability Index (MDPI)
+# [SHITTYകാക്ക] 🎯
 
 ## Basic Details
-### Team Name: Avian Defense Systems
+### Team Name: [wildX]
+
 ### Team Members
-- Team Lead: Gemini CLI - Silicon Valley of the East
+- Team Lead: [Ann Mariya Joju M] - [LBS Insitute Of Techonlogy For Women]
+- Member 2: [Saina Sathar] - [LBS Insitute Of Technology For Women]
 
 ### Project Description
-A high-conversion, chaotic, and scientifically humorous web application that computes the precise mathematical probability of a Kerala crow dropping a "white tactical strike" (poop) on you, based on environmental zones, vehicle shine, and local snack proximity.
+[Have you ever gone out for fresh air and came home after കാക്ക shit on you ? We feel you.That's why we created SHITTYകാക്ക : a web application that predicts the chances of you getting shitted on when you go out to landmarks in our KOCHU KERALAM]
 
 ### The Problem (that doesn't exist)
-The existential dread of walking under an electricity line in Kozhikode or parking your freshly waxed Royal Enfield under a mango tree without knowing the exact risk of an aerial bombardment.
+[കാക്കക്കൂട്ടം causing aura loss to all of us by planning and deploying shitty attacks throughout kerala(I'm a victim).]
 
 ### The Solution (that nobody asked for)
-The **MDPI (Malabaric Dropping Probability Index)**. A real-time trajectory analysis tool that factors in Thattukada density, gold chain reflectivity, and the Balikakka roosting schedule to give you a percentage-based survival rate.
+[Shittyകാക്ക Predicts every move of കാക്കച്ചീസ്  and protects our civilians against a shitfest! It uses an inhomogeneous Poisson point process(big words wow) to predict the probability of you being shitted on, depending on various conditions(പ്ലാവിന്റെ ചുവട്ടിൽ ഒന്നും കേറി നിക്കല്ലേ). But be careful, shittyകാക്ക can only warn you about the disaster, not prevent it.]
 
 ## Technical Details
-### Technologies Used
-- **HTML5/Vanilla JS:** Single-file supernova architecture.
-- **Tailwind CSS:** For that tropical emergency aesthetic.
-- **Web Audio API:** Procedural synthesis of "Caw" and "Splat" sounds (no external assets).
-- **Lucide Icons:** For tactical UI elements.
+### Technologies/Components Used
+For Software:
+- [Languages used are html5,css3,javascript]
+- [Frameworks used tailwindcss]
+- [Libraries used lucide icon , google icon etc ]
+- [Tools like DOM/web APIs , HTML5 Canvas API all are used]
 
 ### Implementation
+For Software:
 # Installation
-1. Clone the repository.
-2. No installation required. It's a single-file masterpiece.
+[<script src="https://cdn.tailwindcss.com"></script>]
 
 # Run
-1. Open `index.html` in any modern web browser.
-2. Pray to the avian gods.
+[Start-Process index.html]
 
 ### Project Documentation
-# Screenshots
-![MDPI Calculator](https://via.placeholder.com/800x400?text=MDPI+Calculator+Interface)
-*The main tactical interface with environmental sliders.*
+For Software:
 
-![Scanning skies](https://via.placeholder.com/800x400?text=Scanning+Skies+Radar)
-*Real-time radar scan for Balikakka activity.*
+# Screenshots (Add at least 3)
 
-![Analysis Complete](https://via.placeholder.com/800x400?text=Splat+Analysis+Result)
-*Final MDPI risk assessment and survival instructions.*
+![https://drive.google.com/file/d/1Q1gXnqAQsc1nyOzKZXF_Y8RrlPAMnAjn/view?usp=drivesdk]( screnshot 1 contains shittyകാക്ക interfance and has search button for user input)
+
+![https://drive.google.com/file/d/1BV44phEZUkc79eMkCzHcu3aXhziQn4HL/view?usp=drivesdk](screenshot 2 contain the beginning of the program)
+
+![https://drive.google.com/file/d/19JS9VvowoAL6fDsA2u4RVisjG4u6dCOu/view?usp=drivesdk](screenshot 3 contains interface to enter further parameters)
+
+# Diagrams
+![* SHITTYകാക്ക (Launch)
+ * Locate
+ * Configure
+ * Trigger
+ * Compute
+ * Display]
+*Predict every move of കാക്കച്ചീസ്  and protect our civilians against a shitfest through the above workflow*
+
+### Project Demo
+# Video
+[https://drive.google.com/file/d/1lNAXPq2dXXqPToXqwb1XZryW2e5_t3qq/view?usp=drivesdk]
+This video explains how shittyകാക്ക works................
+
+# Additional Demos
+[Add any extra demo materials/links]
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
 
 ![Static Badge](https://img.shields.io/badge/TinkerHub-24?color=%23000000&link=https%3A%2F%2Fwww.tinkerhub.org%2F)
 ![Static Badge](https://img.shields.io/badge/UselessProjects--26-26?link=https%3A%2F%2Ftinkerhub.org%2Fevents%2F1M8ORET9A1%2Fuseless-projects-3.0)
+
